@@ -10,7 +10,7 @@ data class User(
     var avatar: String?,
     var rating: Int = 0,
     var respect: Int = 0,
-    val lastVisit: Date? = null,
+    val lastVisit: Date? = Date(),
     val isOnline: Boolean = false
 
 ) {
@@ -28,8 +28,10 @@ data class User(
                 "${if (lastName === "Doe") "His name id $firstName $lastName" else "And his name is $firstName $lastName!!!"}\n")
     }
 
+    // реализация Factory
     companion object Factory {
         private var lastId : Int = -1
+        // создаём экземпляр User
         fun makeUser(fullName:String?) : User {
             lastId++
 
