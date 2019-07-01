@@ -88,9 +88,11 @@ object Utils {
         var lastName = parts?.getOrNull(1)
 
         translitMap.forEach { (from, to) -> firstName = firstName?.replace(from, to) }
-        translitMap.forEach { (from, to) -> lastName = lastName?.replace(from, to) }
+        if (lastName != null) {
+            translitMap.forEach { (from, to) -> lastName = lastName?.replace(from, to) }
+        }
 
-        return "$firstName$divider$lastName"
+        return "$firstName${if (lastName != null) divider+lastName else ""}"
 
     }
 
