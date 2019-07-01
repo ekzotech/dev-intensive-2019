@@ -82,17 +82,21 @@ object Utils {
     }
 
     fun transliteration(payload: String, divider: String = " "): String {
-        val parts: List<String>? = payload?.split(" ")
+//        val parts: List<String>? = payload?.split(" ")
+//
+//        var firstName = parts?.getOrNull(0)
+//        var lastName = parts?.getOrNull(1)
+//
+//        translitMap.forEach { (from, to) -> firstName = firstName?.replace(from, to) }
+//        if (lastName != null) {
+//            translitMap.forEach { (from, to) -> lastName = lastName?.replace(from, to) }
+//        }
+//
+//        return "$firstName${if (lastName != null) divider+lastName else ""}"
+        var result = payload.replace(" ", divider)
+        translitMap.forEach { (from, to) -> result = result.replace(from, to)}
+        return result
 
-        var firstName = parts?.getOrNull(0)
-        var lastName = parts?.getOrNull(1)
-
-        translitMap.forEach { (from, to) -> firstName = firstName?.replace(from, to) }
-        if (lastName != null) {
-            translitMap.forEach { (from, to) -> lastName = lastName?.replace(from, to) }
-        }
-
-        return "$firstName${if (lastName != null) divider+lastName else ""}"
 
     }
 
