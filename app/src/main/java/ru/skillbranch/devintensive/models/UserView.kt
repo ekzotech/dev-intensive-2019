@@ -1,4 +1,4 @@
-package me.evilcorp.devintensive.models
+package ru.skillbranch.devintensive.models
 
 class UserView(
     val id: String,

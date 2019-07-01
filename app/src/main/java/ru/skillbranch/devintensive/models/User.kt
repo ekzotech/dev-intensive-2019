@@ -1,6 +1,6 @@
-package me.evilcorp.devintensive.models
+package ru.skillbranch.devintensive.models
 
-import me.evilcorp.devintensive.utils.Utils
+import ru.skillbranch.devintensive.utils.Utils
 import java.util.*
 
 // в build(): создай User, очисти поля и потом верни User

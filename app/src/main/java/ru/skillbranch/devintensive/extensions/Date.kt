@@ -1,7 +1,5 @@
-package me.evilcorp.devintensive.extensions
+package ru.skillbranch.devintensive.extensions
 
-import java.lang.IllegalStateException
-import java.lang.Long.parseLong
 import java.text.SimpleDateFormat
 import java.util.*
 

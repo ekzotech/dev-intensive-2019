@@ -1,4 +1,4 @@
-package me.evilcorp.devintensive.utils
+package ru.skillbranch.devintensive.utils
 
 val translitMap = mapOf(
     "а" to "a",
