@@ -3,6 +3,8 @@ package me.evilcorp.devintensive.models
 import me.evilcorp.devintensive.utils.Utils
 import java.util.*
 
+// в build(): создай User, очисти поля и потом верни User
+
 data class User(
     val id: String,
     var firstName: String?,
@@ -40,4 +42,34 @@ data class User(
             return User(id= "$lastId", firstName = firstName, lastName = lastName)
         }
     }
+
+    class Builder {
+        companion object Builder {
+            private var lastId : Int = -1
+
+            private var id: String = "${lastId++}"
+            private var firstName: String? = null
+            private var lastName: String? = null
+            private var avatar: String? = null
+            private var rating: Int = 0
+            private var respect: Int = 0
+            private var lastVisit: Date? = Date()
+            private var isOnline: Boolean = false
+        }
+
+        fun id(value: String) = apply { id = value }
+        fun firstName(value: String) = apply { firstName = value }
+        fun lastName(value: String) = apply { lastName = value }
+        fun avatar(value: String) = apply { avatar = value }
+        fun rating(value: Int) = apply { rating = value }
+        fun respect(value: Int) = apply { respect = value }
+        fun lastVisit(value: Date) = apply { lastVisit = value }
+        fun isOnline(value: Boolean) = apply { isOnline = value }
+
+        fun build(): User {
+            return User(id, firstName, lastName, avatar, rating, respect, lastVisit, isOnline)
+        }
+
+    }
 }
+
