@@ -36,13 +36,13 @@ fun Date.humanizeDiff():String {
 
     // разница в мс
     var diff = now.time - this.time
-    isFuture = diff <= 0
+    isFuture = diff < 0
     diff = Math.abs(diff)
 
     if (isFuture) {
         // будущее
         return when(diff) {
-            (0 * SECOND), (1 * SECOND) -> "через секунду"
+            in (0 * SECOND)..(1 * SECOND) -> "через секунду"
             in (1 * SECOND)..(45 * SECOND) -> "через несколько секунд"
             in (45 * SECOND)..(75 * SECOND) -> "через минуту"
             in (75 * SECOND)..(45 * MINUTE) -> "через ${humanizePlurals(diff / MINUTE, TimeUnits.MINUTE)}"
@@ -56,7 +56,7 @@ fun Date.humanizeDiff():String {
     } else {
         // прошлое
         return when(diff) {
-            (0 * SECOND), (1 * SECOND) -> "только что"
+            in (0 * SECOND)..(1 * SECOND) -> "только что"
             in (1 * SECOND)..(45 * SECOND) -> "несколько секунд назад"
             in (45 * SECOND)..(75 * SECOND) -> "минуту назад"
             in (75 * SECOND)..(45 * MINUTE) -> "${humanizePlurals(diff / MINUTE, TimeUnits.MINUTE)} назад"

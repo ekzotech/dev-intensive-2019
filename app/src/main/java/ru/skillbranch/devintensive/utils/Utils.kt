@@ -66,7 +66,7 @@ val translitMap = mapOf(
     "Ь" to "",
     "Э" to "E",
     "Ю" to "Yu",
-    "Я" to "YA"
+    "Я" to "Ya"
 )
 
 object Utils {
