@@ -102,5 +102,38 @@ enum class TimeUnits {
     SECOND,
     MINUTE,
     HOUR,
-    DAY
+    DAY;
+
+    fun plural(value: Int) : String {
+        val lastDigit : Int = value.toString().last().toString().toInt()
+        val prevDigit : Int = if (value.toString().length > 1) {
+            value.toString()[value.toString().length - 2].toString().toInt()
+        } else {
+            0
+        }
+
+        return when(this) {
+            SECOND -> when(lastDigit) {
+                1 -> if (prevDigit != 1) "$value секунду" else "$value секунд"
+                in 2..4 -> if (prevDigit != 1) "$value секунды" else "$value секунд"
+                else -> "$value секунд"
+            }
+            MINUTE -> when(lastDigit) {
+                1 -> if (prevDigit != 1) "$value минуту" else "$value минут"
+                in 2..4 -> if (prevDigit != 1) "$value минуты" else "$value минут"
+                else -> "$value минут"
+            }
+            HOUR -> when(lastDigit) {
+                1 -> if (prevDigit != 1) "$value час" else "$value часов"
+                in 2..4 -> if (prevDigit != 1) "$value часа" else "$value часов"
+                else -> "$value часов"
+            }
+            DAY -> when(lastDigit) {
+                1 -> if (prevDigit != 1) "$value день" else "$value дней"
+                in 2..4 -> if (prevDigit != 1) "$value дня" else "$value дней"
+                else -> "$value дней"
+            }
+        }
+
+    }
 }
