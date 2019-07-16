@@ -1,6 +1,9 @@
 package ru.skillbranch.devintensive.models
 
+import android.util.Log
+
 class Bender(var status: Status = Status.NORMAL, var question: Question = Question.NAME) {
+    var incorrectCount = 0
 
     fun askQuestion(): String = when (question) {
         Question.NAME -> Question.NAME.question
@@ -12,12 +15,37 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
     }
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
-    return if (question.answers.contains(answer)) {
+        when(question) {
+            Question.NAME -> if (answer.toLowerCase()[0] == answer[0]) {
+                return "Имя должно начинаться с заглавной буквы\n${question.question}" to status.color
+            }
+            Question.PROFESSION -> if (answer.toLowerCase()[0] != answer[0]) {
+                return "Профессия должна начинаться со строчной буквы\n${question.question}" to status.color
+            }
+            Question.MATERIAL -> if (answer.replace("[^0-9]".toRegex(), "").isNotEmpty()) {
+                return "Материал не должен содержать цифр\n${question.question}" to status.color
+            }
+            Question.BDAY -> if (answer.replace("[0-9]".toRegex(), "").isNotEmpty()) {
+                return "Год моего рождения должен содержать только цифры\n${question.question}" to status.color
+            }
+            Question.SERIAL -> if (answer.replace("[0-9]".toRegex(), "").isNotEmpty() && answer.length != 7) {
+                return "Серийный номер содержит только цифры, и их 7\n${question.question}" to status.color
+            }
+            Question.IDLE -> Log.d("M_Bender", "Не выполняем валидацию")
+        }
+    return if (question.answers.contains(answer.toLowerCase())) {
         question = question.nextQuestion()
-        "Отлично - это правильный ответ!\n${question.question}" to status.color
+        "Отлично - ты справился\n${question.question}" to status.color
     } else {
-        status = status.nextStatus()
-        "Это неправильный ответ!\n${question.question}" to status.color
+        if (incorrectCount < 2) {
+            status = status.nextStatus()
+            "Это неправильный ответ\n${question.question}" to status.color
+        } else {
+            incorrectCount = 0
+            question = Question.NAME
+            status = Status.NORMAL
+            "Это неправильный ответ. Давай все по новой\n${question.question}" to status.color
+        }
     }
     }
 
@@ -54,7 +82,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
         SERIAL("Мой серийный номер?", listOf("2716057")) {
             override fun nextQuestion(): Question = IDLE
         },
-        IDLE("На этом всё, вопросов больше нет", listOf()) {
+        IDLE("На этом все, вопросов больше нет", listOf()) {
             override fun nextQuestion(): Question = IDLE
         };
 
