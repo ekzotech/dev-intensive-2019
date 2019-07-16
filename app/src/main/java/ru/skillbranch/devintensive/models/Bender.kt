@@ -28,7 +28,7 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
             Question.BDAY -> if (answer.replace("[0-9]".toRegex(), "").isNotEmpty()) {
                 return "Год моего рождения должен содержать только цифры\n${question.question}" to status.color
             }
-            Question.SERIAL -> if (answer.replace("[0-9]".toRegex(), "").isNotEmpty() && answer.length != 7) {
+            Question.SERIAL -> if (answer.replace("[0-9]".toRegex(), "").isNotEmpty() || answer.length != 7) {
                 return "Серийный номер содержит только цифры, и их 7\n${question.question}" to status.color
             }
             Question.IDLE -> Log.d("M_Bender", "Не выполняем валидацию")
