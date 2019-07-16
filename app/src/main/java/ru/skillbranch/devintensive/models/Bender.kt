@@ -16,10 +16,10 @@ class Bender(var status: Status = Status.NORMAL, var question: Question = Questi
 
     fun listenAnswer(answer: String): Pair<String, Triple<Int, Int, Int>> {
         when(question) {
-            Question.NAME -> if (answer.toLowerCase()[0] == answer[0]) {
+            Question.NAME -> if (answer.isNotEmpty() && answer.toLowerCase()[0] == answer[0]) {
                 return "Имя должно начинаться с заглавной буквы\n${question.question}" to status.color
             }
-            Question.PROFESSION -> if (answer.toLowerCase()[0] != answer[0]) {
+            Question.PROFESSION -> if (answer.isNotEmpty() && answer.toLowerCase()[0] != answer[0]) {
                 return "Профессия должна начинаться со строчной буквы\n${question.question}" to status.color
             }
             Question.MATERIAL -> if (answer.replace("[^0-9]".toRegex(), "").isNotEmpty()) {
