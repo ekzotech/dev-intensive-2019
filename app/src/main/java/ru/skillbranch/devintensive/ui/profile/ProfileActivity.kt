@@ -24,10 +24,11 @@ class ProfileActivity : AppCompatActivity() {
     }
 
     private lateinit var viewModel: ProfileViewModel
-    var isEditMode = false
-    lateinit var viewFields: Map<String, TextView>
+    private var isEditMode = false
+    private lateinit var viewFields: Map<String, TextView>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
         initViews(savedInstanceState)
@@ -48,10 +49,13 @@ class ProfileActivity : AppCompatActivity() {
         )
 
         isEditMode = savedInstanceState?.getBoolean(IS_EDIT_MODE, false) ?: false
-
         showCurrentMode(isEditMode)
 
         btn_edit.setOnClickListener {
+            if (wr_repository.error == "Невалидный адрес репозитория"){
+                et_repository.setText("")
+            }
+
             if (isEditMode) saveProfileInfo()
             isEditMode = !isEditMode
             showCurrentMode(isEditMode)
@@ -62,14 +66,12 @@ class ProfileActivity : AppCompatActivity() {
         }
 
         et_repository.addTextChangedListener(object : TextWatcher {
-            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
-            override fun afterTextChanged(s: Editable?) {
-                viewModel.onRepositoryChanged(s.toString())
+            override fun onTextChanged(text: CharSequence, p1: Int, p2: Int, p3: Int) {
+                viewModel.repositoryValidation(text.toString())
             }
+            override fun afterTextChanged(p0: Editable?) {}
+            override fun beforeTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {}
         })
-
-        iv_avatar.initials = null
 
     }
 
@@ -83,7 +85,7 @@ class ProfileActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this).get(ProfileViewModel::class.java)
         viewModel.getProfileData().observe(this, Observer { updateUI(it) })
         viewModel.getTheme().observe(this, Observer { updateTheme(it) })
-        viewModel.getRepositoryError().observe(this, Observer { updateRepoError(it) })
+        viewModel.isValidRepo().observe(this, Observer { validateRepo(it) })
     }
 
     private fun updateTheme(mode: Int) {
@@ -96,12 +98,16 @@ class ProfileActivity : AppCompatActivity() {
             for ((k, v) in viewFields) {
                 v.text = it[k].toString()
             }
+            setDefaultAvatar(it["initials"].toString())
         }
     }
 
-    private fun updateRepoError(isError: Boolean) {
-        wr_repository.error = if (isError) "Невалидный адрес репозитория" else null
-        wr_repository.isErrorEnabled = isError
+    private fun validateRepo(isError: Boolean) {
+        if (isError) {
+            wr_repository.error = null
+        } else {
+            wr_repository.error = "Невалидный адрес репозитория"
+        }
     }
 
     private fun saveProfileInfo() {
@@ -147,6 +153,10 @@ class ProfileActivity : AppCompatActivity() {
             background.colorFilter = filter
             setImageDrawable(icon)
         }
+    }
+
+    private fun setDefaultAvatar(initials: String) {
+        iv_avatar.setImageBitmap(iv_avatar.drawDefaultAvatar(initials))
     }
 
     override fun onRestart() {

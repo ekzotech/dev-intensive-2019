@@ -1,5 +1,9 @@
 package ru.skillbranch.devintensive.utils
 
+import android.content.Context
+import android.util.TypedValue
+import ru.skillbranch.devintensive.R
+
 val translitMap = mapOf(
     "а" to "a",
     "б" to "b",
@@ -125,6 +129,12 @@ object Utils {
         if (repository.isEmpty()) return true
         val regex = Regex("^(https://)?(www\\.)?(github\\.com/)(?!(${githubReposExcludeSet.joinToString("|")})(?=/|\$))[a-zA-Z\\d](?:[a-zA-Z\\d]|-(?=[a-zA-Z\\d])){0,38}(/)?$")
         return repository.contains(regex)
+    }
+
+    fun getThemeAccentColor(context: Context): Int {
+        val value = TypedValue()
+        context.theme.resolveAttribute(R.attr.colorAccent, value, true)
+        return value.data
     }
 
     private val githubReposExcludeSet = setOf(
