@@ -120,4 +120,26 @@ object Utils {
         return result
 
     }
+
+    fun isRepositoryValid(repository: String): Boolean {
+        if (repository.isEmpty()) return true
+        val regex = Regex("^(https://)?(www\\.)?(github\\.com/)(?!(${githubReposExcludeSet.joinToString("|")})(?=/|\$))[a-zA-Z\\d](?:[a-zA-Z\\d]|-(?=[a-zA-Z\\d])){0,38}(/)?$")
+        return repository.contains(regex)
+    }
+
+    private val githubReposExcludeSet = setOf(
+        "enterprise",
+        "features",
+        "topics",
+        "collections",
+        "trending",
+        "events",
+        "marketplace",
+        "pricing",
+        "nonprofit",
+        "customer-stories",
+        "security",
+        "login",
+        "join"
+    )
 }
