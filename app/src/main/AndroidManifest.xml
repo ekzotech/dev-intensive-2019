@@ -3,6 +3,7 @@
     package="ru.skillbranch.devintensive">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:name=".App"
@@ -21,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name="ru.skillbranch.devintensive.ui.profile.ProfileActivity">
+        <activity android:name="ru.skillbranch.devintensive.ui.profile.ProfileActivity" android:theme="@style/SplashTheme"
+            android:windowSoftInputMode="stateHidden|adjustResize">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

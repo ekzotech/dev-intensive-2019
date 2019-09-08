@@ -8,7 +8,7 @@ class UserView(
     var status: String? = "offline",
     val initials: String?
 ) {
-    fun printMe() {
+    fun printMe() = {
         println(
             """
             id: $id

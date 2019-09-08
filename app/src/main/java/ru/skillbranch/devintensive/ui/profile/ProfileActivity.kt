@@ -133,6 +133,7 @@ class ProfileActivity : AppCompatActivity() {
 
         ic_eye.visibility = if (isEdit) View.GONE else View.VISIBLE
         wr_about.isCounterEnabled = isEdit
+        wr_repository.isErrorEnabled = isEdit
 
         with(btn_edit) {
             val filter: ColorFilter? = if (isEdit) {
@@ -154,6 +155,7 @@ class ProfileActivity : AppCompatActivity() {
             setImageDrawable(icon)
         }
     }
+
 
     private fun setDefaultAvatar(initials: String) {
         iv_avatar.setImageBitmap(iv_avatar.drawDefaultAvatar(initials))

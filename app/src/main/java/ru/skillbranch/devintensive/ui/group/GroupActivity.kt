@@ -21,12 +21,14 @@ import com.bumptech.glide.request.target.CustomTarget
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.chip.Chip
 import kotlinx.android.synthetic.main.activity_group.*
+import kotlinx.android.synthetic.main.activity_main.toolbar
 import ru.skillbranch.devintensive.R
 import ru.skillbranch.devintensive.extensions.dp
 import ru.skillbranch.devintensive.models.data.UserItem
 import ru.skillbranch.devintensive.ui.adapters.UserAdapter
 import ru.skillbranch.devintensive.utils.Utils
 import ru.skillbranch.devintensive.viewmodels.GroupViewModel
+
 
 class GroupActivity : AppCompatActivity() {
 
@@ -108,7 +110,7 @@ class GroupActivity : AppCompatActivity() {
 
     private fun addChipToGroup(user: UserItem) {
         val chip = Chip(this).apply {
-            //подгружаем аватарку по URL, если нет инета или ссылки, то рисуем инициалы
+
             Glide.with(this).load(user.avatar)
                 .circleCrop()
                 .into(object : CustomTarget<Drawable>() {

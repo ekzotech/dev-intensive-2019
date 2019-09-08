@@ -5,7 +5,6 @@ import android.graphics.*
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
-import android.widget.ImageView
 import androidx.annotation.ColorRes
 import androidx.core.content.ContextCompat
 import ru.skillbranch.devintensive.R
@@ -18,13 +17,15 @@ open class CircleImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0
-) : ImageView(context, attrs, defStyleAttr) {
+) : androidx.appcompat.widget.AppCompatImageView(context, attrs, defStyleAttr) {
     companion object {
         private const val DEFAULT_BORDER_WIDTH = 2f
         private const val DEFAULT_BORDER_COLOR = Color.WHITE
     }
 
-    private val paint: Paint = Paint().apply { isAntiAlias = true }
+    private val paintCircle: Paint = Paint().apply { isAntiAlias = true }
+    private val paintBitmap: Paint = Paint().apply { isAntiAlias = true
+        xfermode = PorterDuffXfermode(PorterDuff.Mode.SRC_IN)}
     private val paintBorder: Paint = Paint().apply { isAntiAlias = true }
 
     private var circleCenter = 0f
@@ -43,19 +44,34 @@ open class CircleImageView @JvmOverloads constructor(
     }
 
     override fun onDraw(canvas: Canvas) {
-        loadBitmap()
+//        loadBitmap()
+//
+//        if (civImage == null) return
+//        val circleCenterWithBorder = circleCenter + borderWidth
+//
+//        canvas.drawCircle(circleCenterWithBorder, circleCenterWithBorder, circleCenterWithBorder, paintBorder)
+//        canvas.drawCircle(circleCenterWithBorder, circleCenterWithBorder, circleCenter, paintCircle)
 
-        if (civImage == null) return
-        val circleCenterWithBorder = circleCenter + borderWidth
+        civImage = drawableToBitmap(drawable) ?: return
+        val radius = min(width, height)/2f
 
-        canvas.drawCircle(circleCenterWithBorder, circleCenterWithBorder, circleCenterWithBorder, paintBorder)
-        canvas.drawCircle(circleCenterWithBorder, circleCenterWithBorder, circleCenter, paint)
+        setLayerType(LAYER_TYPE_HARDWARE, paintCircle)
+        canvas.drawCircle(radius,radius,radius, paintCircle)
+        canvas.drawBitmap(civImage!!, 0f, 0f, paintBitmap)
+
+        if (borderWidth > 0) {
+            paintBorder.color = borderColor
+            paintBorder.strokeWidth = borderWidth
+            paintBorder.style = Paint.Style.STROKE
+            canvas.drawCircle(radius, radius, radius-borderWidth/2, paintBorder)
+        }
     }
 
     fun getBorderWidth(): Int = borderWidth.toInt().toDp()
 
     fun setBorderWidth(widthInDp: Int) {
         borderWidth = widthInDp.toFloat().dp
+        invalidate()
     }
 
     fun setBorderColor(hex: String) {
@@ -103,6 +119,8 @@ open class CircleImageView @JvmOverloads constructor(
         invalidate()
     }
 
+
+
     private fun loadBitmap() {
         civImage = drawableToBitmap(drawable)
         updateShader()
@@ -125,7 +143,7 @@ open class CircleImageView @JvmOverloads constructor(
                 setScale(scale, scale)
                 postTranslate(dx, dy)
             })
-            paint.shader = shader
+            paintCircle.shader = shader
         }
     }
 
