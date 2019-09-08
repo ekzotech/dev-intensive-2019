@@ -14,7 +14,7 @@ import ru.skillbranch.devintensive.extensions.toDp
 import ru.skillbranch.devintensive.utils.Utils.getThemeAccentColor
 import kotlin.math.min
 
-class CircleImageView @JvmOverloads constructor(
+open class CircleImageView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
     defStyleAttr: Int = 0

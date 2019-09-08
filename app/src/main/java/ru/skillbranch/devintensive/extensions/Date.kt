@@ -29,6 +29,16 @@ fun Date.add(value:Int, units: TimeUnits = TimeUnits.SECOND) : Date {
     return this
 }
 
+fun Date.shortFormat(): String? {
+    val pattern = if (this.issSameDay(Date())) "HH:mm" else "dd.MM.yy"
+    val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
+    return dateFormat.format(this)
+}
+
+fun Date.issSameDay(date: Date) : Boolean {
+    return this.time/ TimeUnits.DAY.value == date.time/ TimeUnits.DAY.value
+}
+
 fun Date.humanizeDiff():String {
 
     val now = Date()
@@ -98,42 +108,23 @@ private fun humanizePlurals(count: Long, unit: TimeUnits) : String {
     }
 }
 
-enum class TimeUnits {
-    SECOND,
-    MINUTE,
-    HOUR,
-    DAY;
+enum class TimeUnits(val value: Long, private val ONE: String, private val FEW: String, private val MANY: String) {
 
-    fun plural(value: Int) : String {
-        val lastDigit : Int = value.toString().last().toString().toInt()
-        val prevDigit : Int = if (value.toString().length > 1) {
-            value.toString()[value.toString().length - 2].toString().toInt()
-        } else {
-            0
+    SECOND(1000L,"секунду", "секунды", "секунд"),
+    MINUTE(1000L*60L, "минуту", "минуты", "минут"),
+    HOUR(1000L*60L*60L, "час", "часа", "часов"),
+    DAY(1000L*60L*60L*24L, "день", "дня", "дней");
+
+    fun plural(num: Long) : String {
+        return "$num ${this.getAmount(num)}"
+    }
+
+    private fun getAmount(num: Long) : String {
+        return when{
+            num in 5..20L -> MANY
+            num%10  == 1L  -> ONE
+            num%10 in 2..4L  -> FEW
+            else -> MANY
         }
-
-        return when(this) {
-            SECOND -> when(lastDigit) {
-                1 -> if (prevDigit != 1) "$value секунду" else "$value секунд"
-                in 2..4 -> if (prevDigit != 1) "$value секунды" else "$value секунд"
-                else -> "$value секунд"
-            }
-            MINUTE -> when(lastDigit) {
-                1 -> if (prevDigit != 1) "$value минуту" else "$value минут"
-                in 2..4 -> if (prevDigit != 1) "$value минуты" else "$value минут"
-                else -> "$value минут"
-            }
-            HOUR -> when(lastDigit) {
-                1 -> if (prevDigit != 1) "$value час" else "$value часов"
-                in 2..4 -> if (prevDigit != 1) "$value часа" else "$value часов"
-                else -> "$value часов"
-            }
-            DAY -> when(lastDigit) {
-                1 -> if (prevDigit != 1) "$value день" else "$value дней"
-                in 2..4 -> if (prevDigit != 1) "$value дня" else "$value дней"
-                else -> "$value дней"
-            }
-        }
-
     }
 }

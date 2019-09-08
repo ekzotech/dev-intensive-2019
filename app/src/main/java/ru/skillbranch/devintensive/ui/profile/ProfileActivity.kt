@@ -75,9 +75,9 @@ class ProfileActivity : AppCompatActivity() {
 
     }
 
-    override fun onSaveInstanceState(outState: Bundle?) {
+    override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        outState?.putBoolean(IS_EDIT_MODE, isEditMode)
+        outState.putBoolean(IS_EDIT_MODE, isEditMode)
 
     }
 
@@ -90,7 +90,7 @@ class ProfileActivity : AppCompatActivity() {
 
     private fun updateTheme(mode: Int) {
         Log.d("M_ProfileActivity", "Update theme")
-        delegate.setLocalNightMode(mode)
+        delegate.localNightMode = mode
     }
 
     private fun updateUI(profile: Profile) {
