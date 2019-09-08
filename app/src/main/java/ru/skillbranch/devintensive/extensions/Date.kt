@@ -2,6 +2,7 @@ package ru.skillbranch.devintensive.extensions
 
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.abs
 
 const val SECOND = 1000L
 const val MINUTE = 60 * SECOND
@@ -30,12 +31,12 @@ fun Date.add(value:Int, units: TimeUnits = TimeUnits.SECOND) : Date {
 }
 
 fun Date.shortFormat(): String? {
-    val pattern = if (this.issSameDay(Date())) "HH:mm" else "dd.MM.yy"
+    val pattern = if (this.isSameDay(Date())) "HH:mm" else "dd.MM.yy"
     val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
     return dateFormat.format(this)
 }
 
-fun Date.issSameDay(date: Date) : Boolean {
+fun Date.isSameDay(date: Date) : Boolean {
     return this.time/ TimeUnits.DAY.value == date.time/ TimeUnits.DAY.value
 }
 
@@ -47,7 +48,7 @@ fun Date.humanizeDiff():String {
     // разница в мс
     var diff = now.time - this.time
     isFuture = diff < 0
-    diff = Math.abs(diff)
+    diff = abs(diff)
 
     if (isFuture) {
         // будущее
